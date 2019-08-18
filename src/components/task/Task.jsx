@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import {Card, CardContent, Typography} from "@material-ui/core";
-
 import ExchangeRateCard from "./ExchangeRateCard";
-import ExampleTable from "./ExampleTable";
+import CompanyTable from "./CompanyTable";
+import Spinner from 'react-bootstrap/Spinner';
 
 
 // import data from "../../data";
@@ -12,20 +12,37 @@ import ExampleTable from "./ExampleTable";
 // If you have trouble with this, you can access the data through the uncommenting import "data" file above
 // console.log(data);
 
+
 class Task extends Component {
-    state = {
-        base: null,
-        rates: {
-            USD: null,
-            AUD: null,
-        },
-    };
+    constructor(props){
+        super(props);
+        this.state = {
+            base: null,
+            rates: {
+                USD: null,
+                AUD: null,
+            },
+            companies: [{}],
+        };
+        this.data = [];
+    }
+    
 
     componentDidMount() {
         // fetch API to get base exchange rates for USD  / NZD / AUS
         fetch("http://www.mocky.io/v2/5d4cb480310000c503a95480")
             .then(response => response.json())
             .then(response => this.setState({ ...response }));
+        //fetch API to get the data
+        fetch("http://www.mocky.io/v2/5d4caeb23100000a02a95477")
+            .then(response => response.json())
+            //.then(data => this.data = data)
+            .then(data => this.setState({companies: data}));
+            //.then(data => this.setState({companyCountries: [...new Set(this.state.companies.map(item => item.country))]}));
+
+            //const unique = [...new Set(props.companies.map(item => item.country))];
+            
+
     }
 
     render() {
@@ -53,7 +70,11 @@ class Task extends Component {
                 </Card>
                 <ExchangeRateCard rates={this.state.rates} base={this.state.base} />
                 { /* Replace this example table with your solution below. */}
-                <ExampleTable />
+                {/* <DynamicTable companies={this.state.companies} countries={this.state.companyCountries} sortBy={this.sortBy} filterBy={this.filterBy} /> */}
+                { /* Waits till the api call has been finished and states are set */ }
+                {this.state.companies.length > 1 && this.state.base ? <CompanyTable companies={this.state.companies} rates={this.state.rates}/> : <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '10vh'}} ><Spinner animation="grow" /></div> }
+
+             
             </div>
         );
     }
