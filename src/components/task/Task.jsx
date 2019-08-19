@@ -36,11 +36,7 @@ class Task extends Component {
         //fetch API to get the data
         fetch("http://www.mocky.io/v2/5d4caeb23100000a02a95477")
             .then(response => response.json())
-            //.then(data => this.data = data)
             .then(data => this.setState({companies: data}));
-            //.then(data => this.setState({companyCountries: [...new Set(this.state.companies.map(item => item.country))]}));
-
-            //const unique = [...new Set(props.companies.map(item => item.country))];
             
 
     }
@@ -69,8 +65,6 @@ class Task extends Component {
                     </CardContent>
                 </Card>
                 <ExchangeRateCard rates={this.state.rates} base={this.state.base} />
-                { /* Replace this example table with your solution below. */}
-                {/* <DynamicTable companies={this.state.companies} countries={this.state.companyCountries} sortBy={this.sortBy} filterBy={this.filterBy} /> */}
                 { /* Waits till the api call has been finished and states are set */ }
                 {this.state.companies.length > 1 && this.state.base ? <CompanyTable companies={this.state.companies} rates={this.state.rates}/> : <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '10vh'}} ><Spinner animation="grow" /></div> }
 
